@@ -7,5 +7,7 @@ A demo dating app written with Nextjs 14.
 
 ## Resources
 
-- [NextUI](https://nextui.org/docs/guide/introduction)
-- [React Icons](https://react-icons.github.io/react-icons/)
+- [NextUI](https://nextui.org/docs/guide/introduction) - UI components: Cards, Inputs, Buttons, etc.
+- [React Icons](https://react-icons.github.io/react-icons/) - Icons for the site.
+- [React Hook Form](https://react-hook-form.com/) - For handling forms.
+- [Zod](https://zod.dev/) - Schema validation for TypeScript.
