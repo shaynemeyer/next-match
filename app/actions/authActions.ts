@@ -45,7 +45,7 @@ export async function registerUser(
     });
 
     return {
-      success: "success",
+      status: "success",
       data: user,
     };
   } catch (error) {
