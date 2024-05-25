@@ -1,3 +1,5 @@
+"use client";
+
 import { calculateAge } from "@/lib/util";
 import {
   Button,
@@ -53,9 +55,11 @@ function MemberSidebar({ member }: MemberSidebarProps) {
               className={`block rounded ${
                 pathname === link.href
                   ? "text-secondary"
-                  : "hover:text-secondary-50"
+                  : "hover:text-secondary/50"
               }`}
-            ></Link>
+            >
+              {link.name}
+            </Link>
           ))}
         </nav>
       </CardBody>
