@@ -15,7 +15,10 @@ export async function getMembers() {
         },
       },
     });
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 }
 
 export async function getMemberByUserId(userId: string) {
