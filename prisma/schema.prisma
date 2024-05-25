@@ -35,7 +35,7 @@ model User {
   passwordHash  String
   image         String?
   accounts      Account[]
-  Member        Member?
+  member        Member?
 
   @@map("users")
 }
@@ -53,7 +53,7 @@ model Member {
   country     String
   image       String?
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  Photo       Photo[]
+  photos      Photo[]
 }
 
 model Photo {
