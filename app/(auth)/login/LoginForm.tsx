@@ -5,19 +5,30 @@ import { GiPadlock } from "react-icons/gi";
 import { useForm } from "react-hook-form";
 import { LoginSchema, loginSchema } from "@/lib/schemas/loginSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { signInUser } from "@/app/actions/authActions";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 function LoginForm() {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors, isValid, isSubmitting },
   } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     mode: "onTouched",
   });
 
-  const onSubmit = (data: LoginSchema) => {
-    console.log(data);
+  const onSubmit = async (data: LoginSchema) => {
+    const result = await signInUser(data);
+
+    if (result.status === "success") {
+      router.push("/members");
+    } else {
+      toast.error(result.error as string);
+    }
   };
 
   return (
@@ -52,6 +63,7 @@ function LoginForm() {
               errorMessage={errors.password?.message as string}
             />
             <Button
+              isLoading={isSubmitting}
               isDisabled={!isValid}
               fullWidth
               color="secondary"

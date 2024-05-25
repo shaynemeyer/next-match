@@ -12,4 +12,5 @@ A demo dating app written with Nextjs 14.
 - [React Hook Form](https://react-hook-form.com/) - For handling forms.
 - [Zod](https://zod.dev/) - Schema validation for TypeScript.
 - [AuthJS (Next-Auth v5)](https://authjs.dev/getting-started/installation?framework=next.js) - Authentication for NextJS.
+- [React-Toastify](https://www.npmjs.com/package/react-toastify) - Toast Notifications.
 - 
