@@ -16,17 +16,12 @@ import React from "react";
 
 type MemberSidebarProps = {
   member: Member;
+  navLinks: { name: string; href: string }[];
 };
 
-function MemberSidebar({ member }: MemberSidebarProps) {
+function MemberSidebar({ member, navLinks }: MemberSidebarProps) {
   const pathname = usePathname();
-  const basePath = `/members/${member.userId}`;
 
-  const navLinks = [
-    { name: "Profile", href: `${basePath}` },
-    { name: "Photos", href: `${basePath}/photos` },
-    { name: "Chat", href: `${basePath}/chat` },
-  ];
   return (
     <Card className="w-full mt-10 items-center h-[80vh]">
       <Image
