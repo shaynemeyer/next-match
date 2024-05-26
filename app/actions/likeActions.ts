@@ -50,3 +50,57 @@ export async function fetchCurrentUserLikeIds() {
     throw error;
   }
 }
+
+export async function fetchLikedMembers(type = "source") {
+  try {
+    const userId = await getAuthUserId();
+
+    switch (type) {
+      case "source":
+        return fetchSourceLikes(userId);
+      case "target":
+        return fetchTargetLikes(userId);
+      case "mutual":
+        return fetchMutualLikes(userId);
+      default:
+        break;
+    }
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+async function fetchSourceLikes(userId: string) {
+  const sourceList = await prisma.like.findMany({
+    where: { sourceUserId: userId },
+    select: { targetMember: true },
+  });
+
+  return sourceList.map((l) => l.targetMember);
+}
+
+async function fetchTargetLikes(userId: string) {
+  const targetList = await prisma.like.findMany({
+    where: { targetUserId: userId },
+    select: { sourceMember: true },
+  });
+
+  return targetList.map((l) => l.sourceMember);
+}
+
+async function fetchMutualLikes(userId: string) {
+  const likedUsers = await prisma.like.findMany({
+    where: { sourceUserId: userId },
+    select: { targetUserId: true },
+  });
+
+  const likedIds = likedUsers.map((l) => l.targetUserId);
+
+  const mutualList = await prisma.like.findMany({
+    where: {
+      AND: [{ targetUserId: userId }, { sourceUserId: { in: likedIds } }],
+    },
+    select: { sourceMember: true },
+  });
+  return mutualList.map((l) => l.sourceMember);
+}
