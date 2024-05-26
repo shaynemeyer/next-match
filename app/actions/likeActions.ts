@@ -63,7 +63,7 @@ export async function fetchLikedMembers(type = "source") {
       case "mutual":
         return fetchMutualLikes(userId);
       default:
-        break;
+        return [];
     }
   } catch (error) {
     console.log(error);
