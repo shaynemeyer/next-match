@@ -31,7 +31,7 @@ export async function toggleLikeMember(targetUserId: string, isLiked: boolean) {
   }
 }
 
-export async function getLikesByUserId(userId: string) {
+export async function fetchCurrentUserLikeIds() {
   try {
     const userId = await getAuthUserId();
 
