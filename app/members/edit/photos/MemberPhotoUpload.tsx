@@ -19,7 +19,7 @@ function MemberPhotoUpload() {
     }
   };
   return (
-    <div className="pt-5 pl-5">
+    <div>
       <ImageUploadButton onUploadImage={onAddImage} />
     </div>
   );
