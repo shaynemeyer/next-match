@@ -1,5 +1,7 @@
 import { getAuthUserId } from "@/app/actions/authActions";
 import { getMemberPhotosByUserId } from "@/app/actions/memberActions";
+import DeleteButton from "@/components/DeleteButton";
+import StarButton from "@/components/StarButton";
 import { CardBody, CardHeader, Divider, Image } from "@nextui-org/react";
 import React from "react";
 
@@ -25,6 +27,12 @@ async function PhotosPage() {
                   src={photo.url}
                   alt="Image of user"
                 />
+                <div className="absolute top-3 left-3 z-50">
+                  <StarButton selected={false} loading={false} />
+                </div>
+                <div className="absolute top-3 right-3 z-50">
+                  <DeleteButton loading={false} />
+                </div>
               </div>
             ))}
         </div>
