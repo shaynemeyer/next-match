@@ -3,13 +3,10 @@ import {
   getMemberByUserId,
   getMemberPhotosByUserId,
 } from "@/app/actions/memberActions";
-import DeleteButton from "@/components/DeleteButton";
-import StarButton from "@/components/StarButton";
-import { CardBody, CardHeader, Divider } from "@nextui-org/react";
 import React from "react";
 import MemberPhotoUpload from "./MemberPhotoUpload";
-import MemberImage from "@/components/MemberImage";
 import MemberPhotos from "@/components/MemberPhotos";
+import CardInnerWrapper from "@/components/CardInnerWrapper";
 
 async function PhotosPage() {
   const userId = await getAuthUserId();
@@ -17,20 +14,23 @@ async function PhotosPage() {
   const photos = await getMemberPhotosByUserId(userId);
 
   return (
-    <>
-      <CardHeader className="flex flex-row justify-between items-center">
-        <div className="text-2xl font-semibold text-secondary">Edit Photos</div>
-        <MemberPhotoUpload />
-      </CardHeader>
-      <Divider />
-      <CardBody>
+    <CardInnerWrapper
+      header={
+        <div className="flex flex-row justify-between items-center w-full">
+          <div className="text-2xl font-semibold text-secondary">
+            Edit Photos
+          </div>
+          <MemberPhotoUpload />
+        </div>
+      }
+      body={
         <MemberPhotos
           photos={photos}
           editing={true}
           mainImageUrl={member?.image}
         />
-      </CardBody>
-    </>
+      }
+    />
   );
 }
 
