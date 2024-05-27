@@ -5,6 +5,7 @@ import ImageUploadButton from "@/components/ImageUploadButton";
 import StarButton from "@/components/StarButton";
 import { CardBody, CardHeader, Divider, Image } from "@nextui-org/react";
 import React from "react";
+import MemberPhotoUpload from "./MemberPhotoUpload";
 
 async function PhotosPage() {
   const userId = await getAuthUserId();
@@ -18,9 +19,7 @@ async function PhotosPage() {
       </CardHeader>
       <Divider />
       <CardBody>
-        <div className="pt-5 pl-5">
-          <ImageUploadButton />
-        </div>
+        <MemberPhotoUpload />
         <div className="grid grid-cols-5 gap-3 p-5">
           {photos &&
             photos.map((photo) => (
