@@ -9,15 +9,14 @@ import {
   DropdownSection,
   DropdownTrigger,
 } from "@nextui-org/react";
-import { Session } from "next-auth";
 import Link from "next/link";
 import React from "react";
 
 type UserMenuProps = {
-  user: Session["user"];
+  userInfo: { name: string | null; image: string | null } | null;
 };
 
-function UserMenu({ user }: UserMenuProps) {
+function UserMenu({ userInfo }: UserMenuProps) {
   return (
     <Dropdown placement="bottom-end">
       <DropdownTrigger>
@@ -26,9 +25,9 @@ function UserMenu({ user }: UserMenuProps) {
           as="button"
           className="transition-transform"
           color="secondary"
-          name={user?.name || "user avatar"}
+          name={userInfo?.name || "user avatar"}
           size="sm"
-          src={user?.image || "/images/user.png"}
+          src={userInfo?.image || "/images/user.png"}
         />
       </DropdownTrigger>
       <DropdownMenu variant="flat" aria-label="User actions menu">
@@ -39,7 +38,7 @@ function UserMenu({ user }: UserMenuProps) {
             className="h-14 flex flow-row"
             aria-label="username"
           >
-            Signed in as {user?.name}
+            Signed in as {userInfo?.name}
           </DropdownItem>
         </DropdownSection>
         <DropdownItem as={Link} href="/members/edit">
