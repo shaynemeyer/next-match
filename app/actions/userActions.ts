@@ -5,7 +5,7 @@ import {
   memberEditSchema,
 } from "@/lib/schemas/memberEditSchema";
 import { ActionResult } from "@/types";
-import { Member } from "@prisma/client";
+import { Member, Photo } from "@prisma/client";
 import { getAuthUserId } from "./authActions";
 import { prisma } from "@/lib/prisma";
 
@@ -53,6 +53,25 @@ export async function addImage(url: string, publicId: string) {
           },
         },
       },
+    });
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function setMainImage(photo: Photo) {
+  try {
+    const userId = await getAuthUserId();
+
+    await prisma.member.update({
+      where: { userId },
+      data: { image: photo.url },
+    });
+
+    return prisma.member.update({
+      where: { userId },
+      data: { image: photo.url },
     });
   } catch (error) {
     console.log(error);
