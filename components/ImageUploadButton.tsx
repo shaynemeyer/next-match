@@ -20,7 +20,8 @@ function ImageUploadButton({ onUploadImage }: ImageUploadButtonProps) {
       uploadPreset="nm-demo"
       className="flex items-center gap-2 bg-secondary text-white rounded-lg py-2 px-4 hover:bg-secondary/70"
     >
-      <HiPhoto size={28}>Upload new image</HiPhoto>
+      <HiPhoto size={28} />
+      Upload new image
     </CldUploadButton>
   );
 }

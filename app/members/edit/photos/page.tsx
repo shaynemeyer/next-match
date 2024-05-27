@@ -1,11 +1,11 @@
 import { getAuthUserId } from "@/app/actions/authActions";
 import { getMemberPhotosByUserId } from "@/app/actions/memberActions";
 import DeleteButton from "@/components/DeleteButton";
-import ImageUploadButton from "@/components/ImageUploadButton";
 import StarButton from "@/components/StarButton";
-import { CardBody, CardHeader, Divider, Image } from "@nextui-org/react";
+import { CardBody, CardHeader, Divider } from "@nextui-org/react";
 import React from "react";
 import MemberPhotoUpload from "./MemberPhotoUpload";
+import MemberImage from "@/components/MemberImage";
 
 async function PhotosPage() {
   const userId = await getAuthUserId();
@@ -24,12 +24,7 @@ async function PhotosPage() {
           {photos &&
             photos.map((photo) => (
               <div className="relative" key={photo.id}>
-                <Image
-                  width={220}
-                  height={220}
-                  src={photo.url}
-                  alt="Image of user"
-                />
+                <MemberImage photo={photo} />
                 <div className="absolute top-3 left-3 z-50">
                   <StarButton selected={false} loading={false} />
                 </div>
