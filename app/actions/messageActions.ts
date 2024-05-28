@@ -1,7 +1,7 @@
 "use server";
 
 import { MessageSchema, messageSchema } from "@/lib/schemas/messageSchema";
-import { ActionResult } from "@/types";
+import { ActionResult, MessageWithSenderRecipient } from "@/types";
 import { getAuthUserId } from "./authActions";
 import { prisma } from "@/lib/prisma";
 import { Message } from "@prisma/client";
