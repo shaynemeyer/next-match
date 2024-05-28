@@ -15,3 +15,4 @@ A demo dating app written with Nextjs 14.
 - [React-Toastify](https://www.npmjs.com/package/react-toastify) - Toast Notifications.
 - [Cloudinary Node SDK](https://www.npmjs.com/package/cloudinary) - Interacting with Cloudinary.
 - [NextJS Cloudinary](https://www.npmjs.com/package/next-cloudinary) - For working with Cloudinary from NextJS.
+- [CLSX](https://github.com/lukeed/clsx#readme) - Creating `className` strings conditionally.
