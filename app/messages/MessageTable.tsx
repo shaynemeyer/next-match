@@ -2,6 +2,8 @@
 
 import { MessageDto } from "@/types";
 import {
+  Avatar,
+  Button,
   Card,
   Table,
   TableBody,
@@ -12,7 +14,8 @@ import {
   getKeyValue,
 } from "@nextui-org/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import React from "react";
+import React, { Key, useCallback } from "react";
+import { AiFillDelete } from "react-icons/ai";
 
 type MessageTableProps = {
   messages: MessageDto[];
@@ -36,6 +39,10 @@ function MessageTable({ messages }: MessageTableProps) {
       key: "created",
       label: isOutbox ? "Date sent" : "Date received",
     },
+    {
+      key: "actions",
+      label: "Actions",
+    },
   ];
 
   const handleRowSelect = (key: Key) => {
@@ -45,6 +52,45 @@ function MessageTable({ messages }: MessageTableProps) {
       : `/members/${message?.senderId}`;
     router.push(url + "/chat");
   };
+
+  const renderCell = useCallback(
+    (item: MessageDto, columnKey: keyof MessageDto) => {
+      const cellValue = item[columnKey];
+
+      switch (columnKey) {
+        case "recipientName":
+        case "senderName":
+          return (
+            <div
+              className={`flex items-center gap-2 cursor-pointer ${
+                !item.dateRead && !isOutbox ? "font-semibold" : ""
+              }`}
+            >
+              <Avatar
+                alt="Image of member"
+                src={
+                  (isOutbox ? item.recipientImage : item.senderImage) ||
+                  "/images/user.png"
+                }
+              />
+              <span>{cellValue}</span>
+            </div>
+          );
+
+        case "text":
+          return <div className="truncate">{cellValue}</div>;
+        case "created":
+          return cellValue;
+        default:
+          return (
+            <Button isIconOnly variant="light">
+              <AiFillDelete size={24} className="text-danger" />
+            </Button>
+          );
+      }
+    },
+    [isOutbox]
+  );
 
   return (
     <Card className="flex flex-col gap-3 h-[80vh] overflow-auto">
@@ -66,7 +112,9 @@ function MessageTable({ messages }: MessageTableProps) {
           {(item) => (
             <TableRow key={item.id} className="cursor-pointer">
               {(columnKey) => (
-                <TableCell>{getKeyValue(item, columnKey)}</TableCell>
+                <TableCell>
+                  {renderCell(item, columnKey as keyof MessageDto)}
+                </TableCell>
               )}
             </TableRow>
           )}
