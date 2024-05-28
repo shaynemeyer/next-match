@@ -1,8 +1,12 @@
 import React from "react";
 import CardInnerWrapper from "@/components/CardInnerWrapper";
 import ChatForm from "./ChatForm";
+import { getMemberByUserId } from "@/app/actions/memberActions";
+import { getMessageThread } from "@/app/actions/messageActions";
 
-function ChatPage() {
+async function ChatPage({ params }: { params: { userId: string } }) {
+  const messages = await getMessageThread(params.userId);
+
   return (
     <CardInnerWrapper
       header="Chat"

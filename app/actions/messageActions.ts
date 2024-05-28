@@ -5,6 +5,7 @@ import { ActionResult } from "@/types";
 import { getAuthUserId } from "./authActions";
 import { prisma } from "@/lib/prisma";
 import { Message } from "@prisma/client";
+import { mapMessageToMessageDto } from "@/lib/mappings";
 
 export async function createMessage(
   recipientUserId: string,
@@ -32,5 +33,54 @@ export async function createMessage(
   } catch (error) {
     console.log(error);
     return { status: "error", error: "Something went wrong" };
+  }
+}
+
+export async function getMessageThread(recipientId: string) {
+  try {
+    const userId = await getAuthUserId();
+
+    const messages = await prisma.message.findMany({
+      where: {
+        OR: [
+          {
+            senderId: userId,
+            recipientId,
+          },
+          {
+            senderId: recipientId,
+            recipientId: userId,
+          },
+        ],
+      },
+      orderBy: {
+        created: "asc",
+      },
+      select: {
+        id: true,
+        text: true,
+        created: true,
+        dateRead: true,
+        sender: {
+          select: {
+            userId: true,
+            name: true,
+            image: true,
+          },
+        },
+        recipient: {
+          select: {
+            userId: true,
+            name: true,
+            image: true,
+          },
+        },
+      },
+    });
+
+    return messages.map((message) => mapMessageToMessageDto(message));
+  } catch (error) {
+    console.log(error);
+    throw error;
   }
 }
