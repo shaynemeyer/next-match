@@ -1,6 +1,6 @@
 import { Message } from "@prisma/client";
 import { formatShortDateTime } from "./util";
-import { MessageWithSenderRecipient } from "@/types";
+import { MessageDto, MessageWithSenderRecipient } from "@/types";
 
 export function mapMessageToMessageDto(message: MessageWithSenderRecipient) {
   return {

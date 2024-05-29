@@ -41,3 +41,7 @@ export function truncateString(text?: string | null, num = 50) {
   if (text.length <= num) return text;
   return `${text.slice(0, num)}...`;
 }
+
+export function createChatId(a: string, b: string): string {
+  return a > b ? `${b}-${a}` : `${a}-${b}`;
+}
