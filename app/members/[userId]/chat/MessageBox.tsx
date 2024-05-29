@@ -4,7 +4,7 @@ import { MessageDto } from "@/types";
 import React, { useEffect, useRef } from "react";
 import clsx from "clsx";
 import { Avatar, divider } from "@nextui-org/react";
-import { transformImageUrl } from "@/lib/util";
+import { timeAgo, transformImageUrl } from "@/lib/util";
 
 type MessageBoxProps = {
   message: MessageDto;
@@ -42,7 +42,9 @@ function MessageBox({ message, currentUserId }: MessageBoxProps) {
       })}
     >
       {message.dateRead && message.recipientId !== currentUserId ? (
-        <span className="text-xs text-black italic">(Read 4 mins ago)</span>
+        <span className="text-xs text-black italic">
+          (Read {timeAgo(message.dateRead)})
+        </span>
       ) : (
         <div></div>
       )}

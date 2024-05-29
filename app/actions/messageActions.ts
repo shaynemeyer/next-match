@@ -8,6 +8,7 @@ import { mapMessageToMessageDto } from "@/lib/mappings";
 import { Message } from "postcss";
 import { pusherServer } from "@/lib/pusher";
 import { createChatId } from "@/lib/util";
+import { user } from "@nextui-org/react";
 
 export async function createMessage(
   recipientUserId: string,
@@ -73,16 +74,27 @@ export async function getMessageThread(recipientId: string) {
     });
 
     if (messages.length > 0) {
+      const readMessageIds = messages
+        .filter(
+          (m) =>
+            m.dateRead === null &&
+            m.recipient?.userId === userId &&
+            m.sender?.userId === recipientId
+        )
+        .map((m) => m.id);
+
       await prisma.message.updateMany({
-        where: {
-          senderId: recipientId,
-          recipientId: userId,
-          dateRead: null,
-        },
+        where: { id: { in: readMessageIds } },
         data: {
           dateRead: new Date(),
         },
       });
+
+      await pusherServer.trigger(
+        createChatId(userId, recipientId),
+        "messages:read",
+        readMessageIds
+      );
     }
 
     return messages.map(
