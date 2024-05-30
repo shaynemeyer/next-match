@@ -16,3 +16,5 @@ A demo dating app written with Nextjs 14.
 - [Cloudinary Node SDK](https://www.npmjs.com/package/cloudinary) - Interacting with Cloudinary.
 - [NextJS Cloudinary](https://www.npmjs.com/package/next-cloudinary) - For working with Cloudinary from NextJS.
 - [CLSX](https://github.com/lukeed/clsx#readme) - Creating `className` strings conditionally.
+- [Zustand](https://docs.pmnd.rs/zustand/getting-started/introduction) - Global State (Which users are online)
+- 
