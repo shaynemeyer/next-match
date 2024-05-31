@@ -5,6 +5,7 @@ import React, { useEffect, useRef } from "react";
 import clsx from "clsx";
 import { Avatar, divider } from "@nextui-org/react";
 import { timeAgo, transformImageUrl } from "@/lib/util";
+import PresenceAvatar from "@/components/PresenceAvatar";
 
 type MessageBoxProps = {
   message: MessageDto;
@@ -21,12 +22,12 @@ function MessageBox({ message, currentUserId }: MessageBoxProps) {
   }, [messageEndRef]);
 
   const renderAvatar = () => (
-    <Avatar
-      name={message.senderName}
-      className="self-end"
-      size="sm"
-      src={transformImageUrl(message.senderImage) || "/images/user.png"}
-    />
+    <div className="self-end">
+      <PresenceAvatar
+        src={transformImageUrl(message.senderImage) || "/images/user.png"}
+        userId={message.senderId}
+      />
+    </div>
   );
 
   const messageContentClasses = clsx("flex flex-col w-[50%] px-2 py-1", {
