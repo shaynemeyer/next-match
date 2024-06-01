@@ -15,7 +15,7 @@ async function MessagesPage({
         <MessageSidebar />
       </div>
       <div className="col-span-10">
-        <MessageTable messages={messages} />
+        <MessageTable intialMessages={messages} />
       </div>
     </div>
   );
