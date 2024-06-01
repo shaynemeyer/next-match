@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { UserFilters } from "@/types";
 import { Photo } from "@prisma/client";
 import { addYears } from "date-fns";
+import { getAuthUserId } from "./authActions";
 
 export async function getMembers(searchParams: UserFilters) {
   const session = await auth();
@@ -14,6 +15,8 @@ export async function getMembers(searchParams: UserFilters) {
   const currentDate = new Date();
   const minDob = addYears(currentDate, -ageRange[1] - 1);
   const maxDob = addYears(currentDate, -ageRange[0]);
+
+  const orderBySelector = searchParams?.orderBy || "updated";
 
   try {
     return prisma.member.findMany({
@@ -26,6 +29,7 @@ export async function getMembers(searchParams: UserFilters) {
           userId: session.user.id,
         },
       },
+      orderBy: { [orderBySelector]: "desc" },
     });
   } catch (error) {
     console.log(error);
@@ -50,4 +54,18 @@ export async function getMemberPhotosByUserId(userId: string) {
   if (!member) return null;
 
   return member.photos.map((p) => p) as Photo[];
+}
+
+export async function updateLastActive() {
+  const userId = await getAuthUserId();
+
+  try {
+    return prisma.member.update({
+      where: { userId },
+      data: { updated: new Date() },
+    });
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 }
