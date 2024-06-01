@@ -5,10 +5,8 @@ import { ActionResult, MessageDto } from "@/types";
 import { getAuthUserId } from "./authActions";
 import { prisma } from "@/lib/prisma";
 import { mapMessageToMessageDto } from "@/lib/mappings";
-import { Message } from "postcss";
 import { pusherServer } from "@/lib/pusher";
 import { createChatId } from "@/lib/util";
-import { user } from "@nextui-org/react";
 
 export async function createMessage(
   recipientUserId: string,
@@ -37,6 +35,11 @@ export async function createMessage(
 
     await pusherServer.trigger(
       createChatId(userId, recipientUserId),
+      "message:new",
+      messageDto
+    );
+    await pusherServer.trigger(
+      `private-${recipientUserId}`,
       "message:new",
       messageDto
     );
@@ -73,6 +76,8 @@ export async function getMessageThread(recipientId: string) {
       select: messageSelect,
     });
 
+    let readCount = 0;
+
     if (messages.length > 0) {
       const readMessageIds = messages
         .filter(
@@ -90,6 +95,8 @@ export async function getMessageThread(recipientId: string) {
         },
       });
 
+      readCount = readMessageIds.length;
+
       await pusherServer.trigger(
         createChatId(userId, recipientId),
         "messages:read",
@@ -97,9 +104,13 @@ export async function getMessageThread(recipientId: string) {
       );
     }
 
-    return messages.map(
+    const messagesToReturn = messages.map(
       (message) => mapMessageToMessageDto(message) as MessageDto
     );
+    return {
+      messages: messagesToReturn,
+      readCount,
+    };
   } catch (error) {
     console.log(error);
     throw error;
@@ -172,6 +183,23 @@ export async function deleteMessage(messageId: string, isOutbox: boolean) {
         },
       });
     }
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getUnreadMessageCount() {
+  try {
+    const userId = await getAuthUserId();
+
+    return prisma.message.count({
+      where: {
+        recipientId: userId,
+        recipientDeleted: false,
+        dateRead: null,
+      },
+    });
   } catch (error) {
     console.log(error);
     throw error;
