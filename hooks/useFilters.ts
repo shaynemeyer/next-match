@@ -55,9 +55,12 @@ export const useFilters = () => {
     const params = new URLSearchParams(searchParams);
 
     if (gender.includes(value)) {
-      setFilters("gender", gender.filter((g) => g !== value).toString());
+      setFilters(
+        "gender",
+        gender.filter((g) => g !== value)
+      );
     } else {
-      setFilters("gender", [...gender, value].toString());
+      setFilters("gender", [...gender, value]);
     }
   };
 

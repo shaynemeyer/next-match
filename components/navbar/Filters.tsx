@@ -1,16 +1,9 @@
 "use client";
 
 import { useFilters } from "@/hooks/useFilters";
-import {
-  Button,
-  Select,
-  SelectItem,
-  Slider,
-  Selection,
-} from "@nextui-org/react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import { FaFemale, FaMale } from "react-icons/fa";
+import { Button, Select, SelectItem, Slider } from "@nextui-org/react";
+import { usePathname } from "next/navigation";
+import React from "react";
 
 function Filters() {
   const pathname = usePathname();
@@ -53,6 +46,7 @@ function Filters() {
             maxValue={100}
             defaultValue={filters.ageRange}
             onChangeEnd={(value) => selectAge(value as number[])}
+            aria-label="Age range slider"
           />
         </div>
         <div className="w-1/4">
