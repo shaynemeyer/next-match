@@ -27,6 +27,11 @@ function Filters() {
     { value: "female", icon: FaFemale },
   ];
 
+  const selectedGender = searchParams.get("gender")?.split(",") || [
+    "male",
+    "female",
+  ];
+
   useEffect(() => {
     setClientLoaded(true);
   }, []);
@@ -45,6 +50,20 @@ function Filters() {
     }
   };
 
+  const handleGenderSelect = (value: string) => {
+    const params = new URLSearchParams(searchParams);
+
+    if (selectedGender.includes(value)) {
+      params.set(
+        "gender",
+        selectedGender.filter((g) => g !== value).toString()
+      );
+    } else {
+      params.set("gender", [...selectedGender, value].toString());
+    }
+    router.replace(`${pathname}?${params}`);
+  };
+
   if (pathname !== "/members") return null;
 
   return (
@@ -54,7 +73,13 @@ function Filters() {
         <div className="flex gap-2 items-center">
           <div>Gender:</div>
           {genders.map(({ icon: Icon, value }) => (
-            <Button key={value} size="sm" isIconOnly color="secondary">
+            <Button
+              key={value}
+              size="sm"
+              isIconOnly
+              color={selectedGender.includes(value) ? "secondary" : "default"}
+              onClick={() => handleGenderSelect(value)}
+            >
               <Icon size={24} />
             </Button>
           ))}
