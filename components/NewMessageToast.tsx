@@ -33,6 +33,6 @@ export default function NewMessageToast({ message }: NewMessageToastProps) {
   );
 }
 
-export const newMessageToast = (message: MessageDto) => {
-  toast(<NewMessageToast message={message} />);
-};
+// export const newMessageToast = (message: MessageDto) => {
+//   toast(<NewMessageToast message={message} />);
+// };

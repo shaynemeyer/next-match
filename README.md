@@ -2,6 +2,10 @@
 
 A demo dating app written with Nextjs 14.
 
+---
+## Todos
+
+- Migrate from Pusher to [Soketi](https://github.com/soketi/soketi) (an open source self hosted solution)
 
 ---
 
