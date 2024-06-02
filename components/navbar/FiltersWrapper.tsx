@@ -6,10 +6,11 @@ import Filters from "./Filters";
 function FiltersWrapper() {
   const pathname = usePathname();
 
-  if (pathname === "/messages") {
+  if (pathname === "/members") {
     return <Filters />;
+  } else {
+    return null;
   }
-  return null;
 }
 
 export default FiltersWrapper;
