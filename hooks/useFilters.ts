@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Selection } from "@nextui-org/react";
 import { FaMale, FaFemale } from "react-icons/fa";
 import useFilterStore from "./useFilterStore";
-import { useEffect, useState, useTransition } from "react";
+import { ChangeEvent, useEffect, useState, useTransition } from "react";
 import usePaginationStore from "./usePaginationStore";
 
 export const useFilters = () => {
@@ -26,13 +26,13 @@ export const useFilters = () => {
     setPage: state.setPage,
   }));
 
-  const { gender, ageRange, orderBy } = filters;
+  const { gender, ageRange, orderBy, withPhoto } = filters;
 
   useEffect(() => {
-    if (gender || ageRange || orderBy) {
+    if (gender || ageRange || orderBy || withPhoto) {
       setPage(1);
     }
-  }, [gender, ageRange, orderBy, setPage]);
+  }, [gender, ageRange, orderBy, setPage, withPhoto]);
 
   const orderByList = [
     { label: "Last active", value: "updated" },
@@ -53,10 +53,20 @@ export const useFilters = () => {
       if (orderBy) searchParams.set("orderBy", orderBy);
       if (pageSize) searchParams.set("pageSize", pageSize.toString());
       if (pageNumber) searchParams.set("pageNumber", pageNumber.toString());
+      searchParams.set("withPhoto", withPhoto.toString());
 
       router.replace(`${pathname}?${searchParams}`);
     });
-  }, [ageRange, orderBy, gender, router, pathname, pageSize, pageNumber]);
+  }, [
+    ageRange,
+    orderBy,
+    gender,
+    router,
+    pathname,
+    pageSize,
+    pageNumber,
+    withPhoto,
+  ]);
 
   const handleAgeSelect = (value: number[]) => {
     setFilters("ageRange", value);
@@ -69,8 +79,6 @@ export const useFilters = () => {
   };
 
   const handleGenderSelect = (value: string) => {
-    const params = new URLSearchParams(searchParams);
-
     if (gender.includes(value)) {
       setFilters(
         "gender",
@@ -81,6 +89,10 @@ export const useFilters = () => {
     }
   };
 
+  const handleWithPhotoToggle = (e: ChangeEvent<HTMLInputElement>) => {
+    setFilters("withPhoto", e.target.checked);
+  };
+
   return {
     clientLoaded,
     orderByList,
@@ -88,6 +100,7 @@ export const useFilters = () => {
     selectAge: handleAgeSelect,
     selectGender: handleGenderSelect,
     selectOrder: handleOrderSelect,
+    selectWithPhoto: handleWithPhotoToggle,
     filters,
     isPending,
   };

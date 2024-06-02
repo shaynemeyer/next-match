@@ -1,7 +1,14 @@
 "use client";
 
 import { useFilters } from "@/hooks/useFilters";
-import { Button, Select, SelectItem, Slider, Spinner } from "@nextui-org/react";
+import {
+  Button,
+  Select,
+  SelectItem,
+  Slider,
+  Spinner,
+  Switch,
+} from "@nextui-org/react";
 import React from "react";
 
 function Filters() {
@@ -13,6 +20,7 @@ function Filters() {
     selectAge,
     selectGender,
     selectOrder,
+    selectWithPhoto,
     isPending,
   } = useFilters();
 
@@ -50,6 +58,15 @@ function Filters() {
             defaultValue={filters.ageRange}
             onChangeEnd={(value) => selectAge(value as number[])}
             aria-label="Age range slider"
+          />
+        </div>
+        <div className="flex flex-col items-center">
+          <p className="text-sm">With photo</p>
+          <Switch
+            color="secondary"
+            defaultSelected
+            size="sm"
+            onChange={selectWithPhoto}
           />
         </div>
         <div className="w-1/4">
