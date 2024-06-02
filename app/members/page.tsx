@@ -4,6 +4,7 @@ import MemberCard from "./MemberCard";
 import { fetchCurrentUserLikeIds } from "../actions/likeActions";
 import PaginationComponent from "@/components/PaginationComponent";
 import { UserFilters } from "@/types";
+import EmptyState from "@/components/EmptyState";
 
 async function MembersPage({ searchParams }: { searchParams: UserFilters }) {
   const members = await getMembers(searchParams);
@@ -11,13 +12,19 @@ async function MembersPage({ searchParams }: { searchParams: UserFilters }) {
 
   return (
     <>
-      <div className="mt-10 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-8">
-        {members &&
-          members.map((member) => (
-            <MemberCard key={member.id} member={member} likeIds={likeIds} />
-          ))}
-      </div>
-      <PaginationComponent />
+      {!members || members.length === 0 ? (
+        <EmptyState />
+      ) : (
+        <>
+          <div className="mt-10 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-8">
+            {members &&
+              members.map((member) => (
+                <MemberCard key={member.id} member={member} likeIds={likeIds} />
+              ))}
+          </div>
+          <PaginationComponent />
+        </>
+      )}
     </>
   );
 }

@@ -2,11 +2,9 @@
 
 import { useFilters } from "@/hooks/useFilters";
 import { Button, Select, SelectItem, Slider } from "@nextui-org/react";
-import { usePathname } from "next/navigation";
 import React from "react";
 
 function Filters() {
-  const pathname = usePathname();
   const {
     clientLoaded,
     genderList,
@@ -16,8 +14,6 @@ function Filters() {
     selectGender,
     selectOrder,
   } = useFilters();
-
-  if (pathname !== "/members") return null;
 
   return (
     <div className="shadow-md py-2">
