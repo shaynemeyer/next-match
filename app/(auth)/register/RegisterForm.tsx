@@ -13,15 +13,17 @@ import { FormProvider, useForm } from "react-hook-form";
 import { GiPadlock } from "react-icons/gi";
 import UserDetailsForm from "./UserDetailsForm";
 import ProfileForm from "./ProfileForm";
+import { useRouter } from "next/navigation";
 
 const stepSchemas = [registerSchema, profileSchema];
 
 function RegisterForm() {
   const [activeStep, setActiveStep] = useState(0);
   const currentValidationSchema = stepSchemas[activeStep];
+  const router = useRouter();
 
   const methods = useForm<RegisterSchema>({
-    resolver: zodResolver(registerSchema),
+    resolver: zodResolver(currentValidationSchema),
     mode: "onTouched",
   });
 
@@ -33,14 +35,13 @@ function RegisterForm() {
   } = methods;
 
   const onSubmit = async () => {
-    console.log(getValues());
-    // const result = await registerUser(data);
+    const result = await registerUser(getValues());
 
-    // if (result.status === "success") {
-    //   console.log("User registered successfully");
-    // } else {
-    //   handleFormServerErrors(result, setError);
-    // }
+    if (result.status === "success") {
+      router.push("/register/success");
+    } else {
+      handleFormServerErrors(result, setError);
+    }
   };
 
   const getStepContent = (step: number) => {
