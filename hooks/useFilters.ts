@@ -5,13 +5,14 @@ import { useRouter } from "next/navigation";
 import { Selection } from "@nextui-org/react";
 import { FaMale, FaFemale } from "react-icons/fa";
 import useFilterStore from "./useFilterStore";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 
 export const useFilters = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
   const [clientLoaded, setClientLoaded] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     setClientLoaded(true);
@@ -32,13 +33,15 @@ export const useFilters = () => {
   ];
 
   useEffect(() => {
-    const searchParams = new URLSearchParams();
+    startTransition(() => {
+      const searchParams = new URLSearchParams();
 
-    if (gender) searchParams.set("gender", gender.join(","));
-    if (ageRange) searchParams.set("ageRange", ageRange.toString());
-    if (orderBy) searchParams.set("orderBy", orderBy);
+      if (gender) searchParams.set("gender", gender.join(","));
+      if (ageRange) searchParams.set("ageRange", ageRange.toString());
+      if (orderBy) searchParams.set("orderBy", orderBy);
 
-    router.replace(`${pathname}?${searchParams}`);
+      router.replace(`${pathname}?${searchParams}`);
+    });
   }, [ageRange, orderBy, gender, router, pathname]);
 
   const handleAgeSelect = (value: number[]) => {
@@ -72,5 +75,6 @@ export const useFilters = () => {
     selectGender: handleGenderSelect,
     selectOrder: handleOrderSelect,
     filters,
+    isPending,
   };
 };
