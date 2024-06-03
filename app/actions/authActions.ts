@@ -1,13 +1,14 @@
 "use server";
 
 import { auth, signIn, signOut } from "@/auth";
+import { sendVerificationEmail } from "@/lib/mail";
 import { prisma } from "@/lib/prisma";
 import { LoginSchema } from "@/lib/schemas/loginSchema";
 import {
   RegisterSchema,
   combinedRegisterSchema,
 } from "@/lib/schemas/registerSchema";
-import { generateToken } from "@/lib/tokens";
+import { generateToken, getTokenByToken } from "@/lib/tokens";
 import { ActionResult } from "@/types";
 import { TokenType, User } from "@prisma/client";
 import bcrypt from "bcryptjs";
@@ -27,9 +28,12 @@ export async function signInUser(
     }
 
     if (!existingUser.emailVerified) {
-      const token = generateToken(existingUser.email, TokenType.VERIFICATION);
+      const token = await generateToken(
+        existingUser.email,
+        TokenType.VERIFICATION
+      );
 
-      // todo: send user email
+      await sendVerificationEmail(token.email, token.token);
 
       return {
         status: "error",
@@ -138,7 +142,10 @@ export async function registerUser(
       TokenType.VERIFICATION
     );
 
-    // todo: Send them an email
+    await sendVerificationEmail(
+      verificationToken.email,
+      verificationToken.token
+    );
 
     return {
       status: "success",
@@ -168,4 +175,44 @@ export async function getAuthUserId() {
   if (!userId) throw new Error("Unauthorized");
 
   return userId;
+}
+
+export async function verifyEmail(
+  token: string
+): Promise<ActionResult<string>> {
+  try {
+    const existingToken = await getTokenByToken(token);
+
+    if (!existingToken) {
+      return { status: "error", error: "Invalid token" };
+    }
+
+    const hasExpired = new Date() > existingToken.expires;
+
+    if (hasExpired) {
+      return { status: "error", error: "Token has expired" };
+    }
+
+    const existingUser = await getUserByEmail(existingToken.email);
+
+    if (!existingUser) {
+      return { status: "error", error: "User not found" };
+    }
+
+    await prisma.user.update({
+      where: { id: existingUser.id },
+      data: { emailVerified: new Date() },
+    });
+
+    await prisma.token.delete({
+      where: {
+        id: existingToken.id,
+      },
+    });
+
+    return { status: "success", data: "Success" };
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 }
