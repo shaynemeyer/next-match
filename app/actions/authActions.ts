@@ -7,8 +7,9 @@ import {
   RegisterSchema,
   combinedRegisterSchema,
 } from "@/lib/schemas/registerSchema";
+import { generateToken } from "@/lib/tokens";
 import { ActionResult } from "@/types";
-import { User } from "@prisma/client";
+import { TokenType, User } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { AuthError } from "next-auth";
 
@@ -16,6 +17,26 @@ export async function signInUser(
   data: LoginSchema
 ): Promise<ActionResult<string>> {
   try {
+    const existingUser = await getUserByEmail(data.email);
+
+    if (!existingUser || !existingUser.email) {
+      return {
+        status: "error",
+        error: "Invalid credentials",
+      };
+    }
+
+    if (!existingUser.emailVerified) {
+      const token = generateToken(existingUser.email, TokenType.VERIFICATION);
+
+      // todo: send user email
+
+      return {
+        status: "error",
+        error: "Please verify your email address before logging in",
+      };
+    }
+
     const result = await signIn("credentials", {
       email: data.email,
       password: data.password,
@@ -98,6 +119,7 @@ export async function registerUser(
         name,
         email,
         passwordHash: hashedPassword,
+        profileComplete: true,
         member: {
           create: {
             name,
@@ -110,6 +132,13 @@ export async function registerUser(
         },
       },
     });
+
+    const verificationToken = await generateToken(
+      email,
+      TokenType.VERIFICATION
+    );
+
+    // todo: Send them an email
 
     return {
       status: "success",

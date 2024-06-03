@@ -13,7 +13,7 @@ function ProfileForm() {
   } = useFormContext();
 
   const genderList = [
-    { label: "Mail", value: "male" },
+    { label: "Male", value: "male" },
     { label: "Female", value: "female" },
   ];
   return (

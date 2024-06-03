@@ -14,7 +14,7 @@ function RegisterSuccessPage() {
       action={() => router.push("/login")}
       actionLabel="Go to login"
       headerIcon={FaCheckCircle}
-    ></CardWrapper>
+    />
   );
 }
 export default RegisterSuccessPage;
