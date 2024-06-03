@@ -1,5 +1,12 @@
 "use client";
-import { Button, Card, CardBody, CardHeader, Input } from "@nextui-org/react";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Input,
+  Link,
+} from "@nextui-org/react";
 import React from "react";
 import { GiPadlock } from "react-icons/gi";
 import { useForm } from "react-hook-form";
@@ -72,6 +79,9 @@ function LoginForm() {
             >
               Login
             </Button>
+            <div className="flex justify-center hover:underline text-sm">
+              <Link href="/forgot-password">Forgot password?</Link>
+            </div>
           </div>
         </form>
       </CardBody>
