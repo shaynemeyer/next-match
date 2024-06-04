@@ -240,3 +240,51 @@ export async function generateResetPasswordEmail(
     throw error;
   }
 }
+
+export async function resetPassword(
+  password: string,
+  token: string | null
+): Promise<ActionResult<string>> {
+  try {
+    if (!token) return { status: "error", error: "Missing token" };
+
+    const existingToken = await getTokenByToken(token);
+
+    if (!existingToken) {
+      return { status: "error", error: "Invalid token" };
+    }
+
+    const hasExpired = new Date() > existingToken.expires;
+
+    if (hasExpired) {
+      return { status: "error", error: "Token has expired" };
+    }
+
+    const existingUser = await getUserByEmail(existingToken.email);
+
+    if (!existingUser) {
+      return { status: "error", error: "User not found" };
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await prisma.user.update({
+      where: { id: existingUser.id },
+      data: { passwordHash: hashedPassword },
+    });
+
+    await prisma.token.delete({
+      where: {
+        id: existingToken.id,
+      },
+    });
+
+    return {
+      status: "success",
+      data: "Password updated successfully. Please try logging in",
+    };
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
