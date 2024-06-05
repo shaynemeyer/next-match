@@ -15,6 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signInUser } from "@/app/actions/authActions";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import SocialLogin from "./SocialLogin";
 
 function LoginForm() {
   const router = useRouter();
@@ -79,6 +80,7 @@ function LoginForm() {
             >
               Login
             </Button>
+            <SocialLogin />
             <div className="flex justify-center hover:underline text-sm">
               <Link href="/forgot-password">Forgot password?</Link>
             </div>
