@@ -1,8 +1,9 @@
 import { Resend } from "resend";
 const resend = new Resend(process.env.RESEND_API_KEY);
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 export async function sendVerificationEmail(email: string, token: string) {
-  const link = `${process.env.HOST_URL}/verify-email?token=${token}`;
+  const link = `${baseUrl}/verify-email?token=${token}`;
 
   return resend.emails.send({
     from: "testing@resend.dev",
@@ -17,7 +18,7 @@ export async function sendVerificationEmail(email: string, token: string) {
 }
 
 export async function sendPasswordResetEmail(email: string, token: string) {
-  const link = `${process.env.HOST_URL}/reset-password?token=${token}`;
+  const link = `${baseUrl}/reset-password?token=${token}`;
 
   return resend.emails.send({
     from: "testing@resend.dev",

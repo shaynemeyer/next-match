@@ -5,6 +5,8 @@ import {
   fetchLikedMembers,
 } from "../actions/likeActions";
 
+export const dynamic = "force-dynamic";
+
 async function ListsPage({ searchParams }: { searchParams: { type: string } }) {
   const likeIds = await fetchCurrentUserLikeIds();
   const members = await fetchLikedMembers(searchParams.type);
