@@ -12,7 +12,7 @@ function RegisterSuccessPage() {
       headerText="You have successfully registered"
       subHeaderText="You can now login to the app"
       action={() => router.push("/login")}
-      actionLabel="Go to login"
+      actionLabel="Please verify your email address before you can login"
       headerIcon={FaCheckCircle}
     />
   );
