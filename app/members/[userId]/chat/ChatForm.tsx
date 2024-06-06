@@ -5,13 +5,12 @@ import { MessageSchema, messageSchema } from "@/lib/schemas/messageSchema";
 import { handleFormServerErrors } from "@/lib/util";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Input } from "@nextui-org/react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { HiPaperAirplane } from "react-icons/hi2";
 
 function ChatForm() {
-  const router = useRouter();
   const params = useParams<{ userId: string }>();
 
   const {
@@ -37,7 +36,6 @@ function ChatForm() {
       handleFormServerErrors(result, setError);
     } else {
       reset();
-      router.refresh();
       setTimeout(() => setFocus("text"), 50);
     }
   };
